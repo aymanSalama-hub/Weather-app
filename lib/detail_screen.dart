@@ -5,6 +5,6 @@ class DetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar());
+    return Scaffold(appBar: AppBar(actions: [Icon(Icons.search)]));
   }
 }
