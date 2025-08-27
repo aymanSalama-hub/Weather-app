@@ -10,7 +10,17 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController cityController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  void _navigateToDetailsScreen() {
+    if (formKey.currentState!.validate()) {
+      var city = cityController.text.trim();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => DetailsScreen(city: city)),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,32 +34,14 @@ class _SearchScreenState extends State<SearchScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
-                textInputAction: TextInputAction.search,
-                onFieldSubmitted: (value) {
-                  if (formKey.currentState!.validate()) {
-                    var city = cityController.text.trim();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (contex) => DetailsScreen()),
-                    );
-                  }
-                },
                 controller: cityController,
+                textInputAction: TextInputAction.search,
+                onFieldSubmitted: (_) => _navigateToDetailsScreen(),
                 decoration: InputDecoration(
                   hintText: 'Enter City Name',
                   prefixIcon: IconButton(
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        var city = cityController.text.trim();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (contex) => DetailsScreen(),
-                          ),
-                        );
-                      }
-                    },
-                    icon: Icon(Icons.search),
+                    onPressed: _navigateToDetailsScreen,
+                    icon: const Icon(Icons.search),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -59,11 +51,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (value == null || value.trim().isEmpty) {
                     return 'Enter City Name';
                   }
-
                   if (value.trim().length < 2) {
                     return 'City Name is too short';
                   }
-
                   return null;
                 },
               ),
