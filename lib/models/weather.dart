@@ -4,8 +4,12 @@ class Weather {
   final double minTemperature;
   final double maxTemperature;
   final String description;
+  final String lastUpdated;
+  final String icon;
 
   Weather({
+    required this.lastUpdated,
+    required this.icon,
     required this.cityName,
     required this.temperature,
     required this.minTemperature,
@@ -14,11 +18,13 @@ class Weather {
   });
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
-      cityName: json['name'],
-      temperature: json['main']['temp'].toDouble(),
-      minTemperature: json['main']['temp_min'].toDouble(),
-      maxTemperature: json['main']['temp_max'].toDouble(),
-      description: json['weather'][0]['description'],
+      cityName: json['location']['name'],
+      temperature: json['current']['temp_c'],
+      minTemperature: json['forecast']['forecastday'][0]['day']['mintemp_c'],
+      maxTemperature: json['forecast']['forecastday'][0]['day']['maxtemp_c'],
+      description: json['current']['condition']['text'],
+      icon: json['current']['condition']['icon'],
+      lastUpdated: json['current']['last_updated'],
     );
   }
 }

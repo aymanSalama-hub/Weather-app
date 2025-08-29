@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:weather_app/models/weather.dart';
 import 'package:weather_app/search_screen.dart';
@@ -18,6 +20,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
     minTemperature: 0,
     maxTemperature: 0,
     description: '',
+    lastUpdated: '',
+    icon: '',
   );
 
   @override
@@ -28,6 +32,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Future<void> getWeatherData() async {
     final data = await WeatherService.getWeatherData(widget.city);
+    print(weatherData.icon);
     setState(() {
       weatherData = Weather.fromJson(data);
     });
@@ -35,8 +40,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var update = DateTime.now().toLocal();
-    String timeString = '${update.hour}:${update.minute}';
+    String lastUpdated = weatherData.lastUpdated.split(' ').last;
+    log(weatherData.icon);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -86,7 +91,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               ),
               const SizedBox(height: 4),
               Text(
-                'Updated at $timeString',
+                'Last Updated: $lastUpdated',
                 style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 18,
@@ -117,7 +122,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Icon(Icons.wb_sunny, color: Colors.yellow, size: 32),
+          Image.network(
+            'https:${weatherData.icon}',
+            width: 60,
+            height: 60,
+            fit: BoxFit.cover,
+          ),
           Text(
             '${weatherData.temperature}°C',
             style: const TextStyle(
