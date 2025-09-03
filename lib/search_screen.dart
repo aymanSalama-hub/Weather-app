@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/cubits/get_weather_cubit/get_weather_cubit.dart';
 import 'package:weather_app/detail_screen.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -15,10 +17,8 @@ class _SearchScreenState extends State<SearchScreen> {
   void _navigateToDetailsScreen() {
     if (formKey.currentState!.validate()) {
       var city = cityController.text.trim();
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => DetailsScreen(city: city)),
-      );
+      BlocProvider.of<GetWeatherCubit>(context).getWeather(city);
+      Navigator.pop(context);
     }
   }
 
